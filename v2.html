@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>林烁壕 - 简历</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#3b82f6',
+              dark: '#1e293b',
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .section-title {
+          @apply text-lg font-bold text-primary uppercase tracking-wider mb-3 pb-1 border-b border-gray-200;
+        }
+        .keyword {
+          @apply bg-blue-50 text-primary px-2 py-0.5 rounded font-medium;
+        }
+        .entry-item {
+          @apply mb-4 last:mb-0;
+        }
+      }
+    </style>
+    <style>
+      @media print {
+        @page {
+          size: A4;
+          margin: 1.5cm;
+        }
+
+        body {
+          width: 210mm;
+          height: 297mm;
+        }
+
+        .no-print {
+          display: none !important;
+        }
+      }
+
+      /* 确保屏幕显示时模拟A4尺寸 */
+      .a4-container {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        padding: 1.5cm;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 font-sans text-gray-800 antialiased py-8 text-sm">
+    <div class="a4-container bg-white">
+      <!-- 简历主体 -->
+      <div class="w-full">
+        <!-- 头部区域 - 改为左对齐布局 -->
+        <header class="mb-6 pb-4 border-b border-gray-200">
+          <h1 class="text-3xl font-bold text-dark mb-4">林烁壕</h1>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-gray-600 mb-4"
+          >
+            <div class="flex items-center">
+              <i class="fa fa-phone mr-2 text-primary w-4 text-center"></i>
+              <span>13760810193</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-envelope-o mr-2 text-primary w-4 text-center"></i>
+              <span>1138674510@qq.com</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-map-marker mr-2 text-primary w-4 text-center"></i>
+              <span>深圳</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa fa-github mr-2 text-primary w-4 text-center"></i>
+              <a
+                href="https://github.com/linshuohao"
+                target="_blank"
+                class="hover:text-primary transition-colors"
+              >
+                github.com/linshuohao
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-2 flex items-center gap-2">
+            <div class="text-gray-700 font-medium">求职意向:</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="keyword">资深前端开发工程师</span>
+              <span class="keyword">前端技术经理</span>
+              <span class="keyword">前端技术专家</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <main>
+          <!-- 教育经历 -->
+          <section class="mb-5">
+            <h2 class="section-title flex items-center">
+              <i class="fa fa-graduation-cap mr-2"></i>教育经历
+            </h2>
+            <div class="pl-5">
+              <div
+                class="flex flex-col md:flex-row md:justify-between md:items-center"
+              >
+                <div class="font-medium">华南农业大学 - 资源环境学院</div>
+                <div class="text-gray-500 mt-1 md:mt-0">
+                  2012年09月 - 2016年06月
+                </div>
+              </div>
+              <div class="mt-1 text-gray-600">环境科学本科</div>
+            </div>
+          </section>
+
+          <!-- 专业技能 -->
+          <section class="mb-5">
+            <h2 class="section-title flex items-center">
+              <i class="fa fa-cogs mr-2"></i>专业技能
+            </h2>
+            <div class="pl-5">
+              <ul class="space-y-1.5">
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                  <span
+                    >精通 <span class="keyword">Typescript</span>，熟练掌握
+                    <span class="keyword">ES6+</span> 语法特性</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                  <span
+                    >深入理解
+                    <span class="keyword">Vue</span>
+                    技术栈，具备框架源码贡献经验（<span class="keyword"
+                      >Vue Contributor</span
+                    >）</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                  <span
+                    >熟练运用 <span class="keyword">webpack</span>、<span
+                      class="keyword"
+                      >vite</span
+                    >
+                    等构建工具，对前端工程化有深入实践</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                  <span>具备大型管理后台、复杂表单项目开发经验</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                  <span
+                    >拥有丰富的
+                    <span class="keyword">微前端</span> 项目落地经验和
+                    <span class="keyword">动态表单引擎</span>
+                    设计开发经验，能够支撑复杂业务场景</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                  <span
+                    >熟悉 <span class="keyword">React</span>，了解
+                    <span class="keyword">Flutter</span>
+                    跨平台开发，能够协调团队完成技术方案落地</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- 工作经历 -->
+          <section class="mb-5">
+            <h2 class="section-title flex items-center">
+              <i class="fa fa-briefcase mr-2"></i>工作经历
+            </h2>
+            <div class="pl-5 space-y-4">
+              <!-- 工作1 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">
+                      深圳市客路网络科技有限公司（深圳）-
+                      前端负责人（保险业务线）
+                    </h3>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0"
+                    >2023年06月 - 至今</span
+                  >
+                </div>
+                <ul class="mt-2 space-y-1 pl-5 list-disc text-gray-700">
+                  <li>
+                    带领3人团队，主导保险核心系统重构，负责保险业务线（Web、App）技术规划与架构设计，推动跨团队协作
+                  </li>
+                  <li>推动技术债治理专项，重构核心模块，提升系统可维护性</li>
+                  <li>
+                    主导保险业务线前端架构演进，从众安国际 Fusion 系统交接至
+                    Klook 自主研发体系，完成技术栈统一
+                  </li>
+                  <li>
+                    研发高扩展性 <span class="keyword">动态表单引擎</span>，支撑
+                    10+
+                    保险产品灵活配置，覆盖主险/附加险（inpath）等复杂业务场景，实现可视化表单配置器，配置效率提升
+                    80%+
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 工作2 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">
+                      深信服科技股份有限公司（深圳）- 高级前端开发
+                    </h3>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0"
+                    >2020年10月 - 2023年06月</span
+                  >
+                </div>
+                <ul class="mt-2 space-y-1 pl-5 list-disc text-gray-700">
+                  <li>
+                    负责 <span class="keyword">KubeManager 容器云平台</span> 和
+                    <span class="keyword">智能边缘计算平台 SIEP</span>
+                    核心模块开发及关键技术攻关
+                  </li>
+                  <li>
+                    主导公共业务组件库 和
+                    业务模板开发，标准化团队开发流程，提升业务迭代效率 50%+
+                  </li>
+                  <li>
+                    推动项目架构演进，引入
+                    <span class="keyword">微前端</span>、<span class="keyword"
+                      >Vite</span
+                    >
+                    等前沿技术，保障技术先进性
+                  </li>
+                  <li>
+                    主导容器云平台从 <span class="keyword">Ember.js</span> 到
+                    <span class="keyword">Vue</span>
+                    技术栈重构，提升开发效率和代码可维护性
+                  </li>
+                  <li>
+                    设计并落地 <span class="keyword">微前端</span> 方案，完成
+                    <span class="keyword">monorepo</span>
+                    改造，实现多团队协作开发的高效管理
+                  </li>
+                  <li>
+                    推动 <span class="keyword">Vue 2.7</span> 和
+                    <span class="keyword">Vite 3</span>
+                    升级，修复框架问题并提交社区
+                    <span class="keyword">PR</span>，提升项目开发体验
+                  </li>
+                  <li>
+                    落地
+                    <span class="keyword">自动化测试</span>
+                    方案，覆盖核心功能模块，整体 bug 率降低
+                    50%+，显著提升代码质量
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 工作3 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">
+                      深圳市深传互动科技有限公司（深圳）- 助理前端主管
+                    </h3>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0"
+                    >2018年07月 - 2020年07月</span
+                  >
+                </div>
+                <ul class="mt-2 space-y-1 pl-5 list-disc text-gray-700">
+                  <li>管理6人团队完成新媒体政务平台核心功能开发</li>
+                  <li>
+                    主导技术选型与架构设计，推动
+                    <span class="keyword">TypeScript</span> 全面落地
+                  </li>
+                  <li>
+                    自研
+                    <span class="keyword">微前端</span>
+                    方案并成功应用于项目，支撑 20+ 应用接入
+                  </li>
+                  <li>
+                    基于
+                    <span class="keyword">Element-UI</span>
+                    封装业务组件库，提升开发效率
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 工作4 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">
+                      广州比赛日网络科技有限公司（广州）- 前端开发工程师
+                    </h3>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0"
+                    >2017年12月 - 2020年07月</span
+                  >
+                </div>
+                <ul class="mt-2 space-y-1 pl-5 list-disc text-gray-700">
+                  <li>负责今日彩票网、腾讯体育电竞数据库首页开发</li>
+                  <li>
+                    参与 <span class="keyword">OCR</span> 电竞管理后台功能迭代
+                  </li>
+                  <li>
+                    完成微信公众号网页及
+                    <span class="keyword">小程序</span> 开发
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- 项目经历 -->
+          <section class="mb-5">
+            <h2 class="section-title flex items-center">
+              <i class="fa fa-folder-open mr-2"></i>项目经历
+            </h2>
+            <div class="pl-5 space-y-4">
+              <!-- 项目1 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">
+                      Klook x Fusion 保险业务中台迁移与系统重构
+                    </h3>
+                    <p class="text-gray-500 mt-1">角色：项目负责人</p>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0">2024.04 - 至今</span>
+                </div>
+
+                <div class="mt-2">
+                  <div class="font-medium text-gray-800 mb-1">核心贡献：</div>
+
+                  <div class="mb-2">
+                    <div class="font-medium">核心系统迁移与重构</div>
+                    <ul class="mt-1 space-y-1 pl-5 list-disc text-gray-700">
+                      <li>
+                        主导保险 Standalone 商品结算页/商详页 从 Fusion
+                        系统迁移至 KLOOK 平台，完成支付模块统一化改造，实现与
+                        KLOOK Coupon
+                        优惠券体系的深度集成，确保支付流程的高效性和一致性。
+                      </li>
+                      <li>
+                        设计并实施商品模型同步方案，重构原有 TTD
+                        虚拟活动同步链路，实现保险商品数据与搜推系统（S&R）的标准化对接，提升数据流转效率。
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-2">
+                    <div class="font-medium">动态表单引擎设计与实现</div>
+                    <ul class="mt-1 space-y-1 pl-5 list-disc text-gray-700">
+                      <li>
+                        研发高扩展性
+                        <span class="keyword">动态表单引擎</span>，支撑 10+
+                        保险产品的灵活配置，覆盖主险/附加险（inpath）等复杂业务场景，满足多样化的产品需求。
+                      </li>
+                      <li>
+                        实现
+                        <span class="keyword">可视化表单配置器</span
+                        >，赋能业务人员自主配置产品条款、投保规则、理赔流程，配置效率提升
+                        80%+，显著降低开发依赖。
+                      </li>
+                      <li>
+                        设计
+                        <span class="keyword">SDK 化</span>
+                        表单渲染方案，输出标准化接入规范，支持多业务线（如航旅险、购物险等）快速接入，提升整体开发效率。
+                      </li>
+                      <li>
+                        通过
+                        <span class="keyword">规则引擎</span>
+                        实现动态表单逻辑编排，灵活应对不同险种的差异化校验、计算和联动需求，确保业务逻辑的精准执行。
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-2">
+                    <div class="font-medium">技术突破：</div>
+                    <ul class="mt-1 space-y-1 pl-5 list-disc text-gray-700">
+                      <li>
+                        成功实施 Fusion 系统渐进式降级策略，将核心功能平稳迁移至
+                        Insurance 系统，系统依赖度大幅降低，为后续 cn
+                        站保险业务提供坚实的技术支持。
+                      </li>
+                      <li>
+                        采用
+                        <span class="keyword">JSON Schema</span>
+                        驱动的渲染架构，实现表单
+                        UI、逻辑与校验的完全解耦，提升表单配置的灵活性和可维护性。
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div class="font-medium">项目成果：</div>
+                    <ul class="mt-1 space-y-1 pl-5 list-disc text-gray-700">
+                      <li>
+                        保险产品上线周期从 2 周/个 缩短至 2 天/个，开发效率提升
+                        70%+，显著加速产品迭代。
+                      </li>
+                      <li>
+                        表单配置复用率达 90%+，人力成本降低
+                        60%，极大提升了资源利用率。
+                      </li>
+                      <li>
+                        页面 <span class="keyword">FCP</span> 由 6.3s 优化至
+                        1.3s，用户体验显著提升。
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 项目2 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">
+                      KubeManager 容器云平台 & 智能边缘计算平台 SIEP
+                    </h3>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0"
+                    >2020年10月 - 2023年06月</span
+                  >
+                </div>
+
+                <div class="mt-2">
+                  <div class="font-medium text-gray-800 mb-1">项目背景：</div>
+                  <p class="text-gray-700 mb-2">
+                    基于 <span class="keyword">Rancher</span> 开源项目二次开发的
+                    <span class="keyword">Kubernetes</span> 管理平台，SIEP
+                    是基于该平台的边缘计算平台。
+                  </p>
+
+                  <div class="font-medium text-gray-800 mb-1">项目职责：</div>
+                  <ul class="space-y-1 pl-5 list-disc text-gray-700">
+                    <li>
+                      主导技术栈从 <span class="keyword">Ember.js</span> 到
+                      <span class="keyword">Vue</span>
+                      的重构，负责架构设计和核心模块开发
+                    </li>
+                    <li>
+                      设计 <span class="keyword">微前端</span> 方案，完成
+                      <span class="keyword">monorepo</span> + 微前端改造
+                    </li>
+                    <li>
+                      实现
+                      <span class="keyword">骨架屏</span>
+                      自动生成方案优化加载体验
+                    </li>
+                    <li>
+                      推动 <span class="keyword">Vue 2.7</span> &
+                      <span class="keyword">Vite 3</span>
+                      升级，修复框架问题并提交社区
+                      <span class="keyword">PR</span>
+                    </li>
+                    <li>
+                      落地 <span class="keyword">自动化测试</span> 方案，整体
+                      bug 率降低 50%+
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 项目3 -->
+              <div class="entry-item">
+                <div
+                  class="flex flex-col md:flex-row md:justify-between md:items-center"
+                >
+                  <div>
+                    <h3 class="font-bold text-dark">新媒体政务平台</h3>
+                  </div>
+                  <span class="text-gray-500 mt-1 md:mt-0"
+                    >2018年07月 - 2020年07月</span
+                  >
+                </div>
+
+                <div class="mt-2">
+                  <div class="font-medium text-gray-800 mb-1">项目背景：</div>
+                  <p class="text-gray-700 mb-2">
+                    一站式新媒体运营平台，服务 100+ 政府及企业客户。
+                  </p>
+
+                  <div class="font-medium text-gray-800 mb-1">项目职责：</div>
+                  <ul class="space-y-1 pl-5 list-disc text-gray-700">
+                    <li>
+                      制定代码规范，引入 <span class="keyword">ESLint</span> +
+                      <span class="keyword">Prettier</span> +
+                      <span class="keyword">TypeScript</span>
+                    </li>
+                    <li>
+                      自研 <span class="keyword">微前端</span> 方案并落地实施
+                    </li>
+                    <li>
+                      基于
+                      <span class="keyword">Element-UI</span> 封装业务组件库
+                    </li>
+                    <li>
+                      开发大屏可视化 <span class="keyword">低代码平台</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 个人总结 -->
+          <section>
+            <h2 class="section-title flex items-center">
+              <i class="fa fa-user mr-2"></i>个人总结
+            </h2>
+            <div class="pl-5">
+              <ul class="space-y-1.5">
+                <li class="flex items-start">
+                  <i class="fa fa-star text-primary mt-1 mr-2"></i>
+                  <span
+                    >拥有近8年前端开发经验，从前端工程师成长为技术负责人，主导过多个大型项目的架构设计与落地</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-star text-primary mt-1 mr-2"></i>
+                  <span
+                    >深耕Vue技术栈并参与框架源码贡献，同时具备React和Flutter跨平台开发能力，技术视野全面</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-star text-primary mt-1 mr-2"></i>
+                  <span>在微前端、工程化、动态表单引擎等领域有深入实践</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-star text-primary mt-1 mr-2"></i>
+                  <span
+                    >具备团队管理经验，带领3-6人团队完成核心业务系统开发，擅长技术方案设计与跨团队协作</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-star text-primary mt-1 mr-2"></i>
+                  <span
+                    >持续关注前端技术发展，积极推动技术创新与落地，具备解决复杂业务问题的能力和
+                    Geek 精神</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

@@ -15,7 +15,8 @@
                         dark: '#1e293b',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif', 'SimSun', '宋体', 'Microsoft YaHei', '微软雅黑'],
+                        serif: ['Georgia', 'Cambria', 'Times New Roman', 'Times', 'SimSun', '宋体'],
                     },
                 },
             }
@@ -38,7 +39,7 @@
         @media print {
             @page {
                 size: A4;
-                margin: 1.5cm;
+                padding: 0;
             }
 
             body {
@@ -46,6 +47,47 @@
                 height: 297mm;
             }
 
+            .a4-container {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            /* 确保链接在打印时显示完整URL */
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 90%;
+                color: #666;
+            }
+
+            /* 确保标题不会单独出现在页尾 */
+            h2,h3 {
+                page-break-after: avoid;
+            }
+
+            /* 调整页脚样式，避免内容溢出 */
+            footer {
+                page-break-before: avoid;
+            }
+
+            /* 优化表格打印样式（如果后续添加表格） */
+            table {
+                border-collapse: collapse;
+            }
+
+            table, th, td {
+                border: 1px solid #ccc !important;
+            }
+
+            /* 确保图片清晰且不超出页面 */
+            img {
+                max-width: 100% !important;
+                height: auto !important;
+                page-break-inside: avoid;
+            }
+
+            /* 隐藏不必要的打印元素 */
             .no-print {
                 display: none !important;
             }
@@ -57,7 +99,6 @@
             min-height: 297mm;
             margin: 0 auto;
             padding: 1.5cm;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>

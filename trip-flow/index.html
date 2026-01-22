@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TripFlow v2.0 (Final)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { primary: '#0ea5e9', anchor: '#f43f5e', option: '#64748b' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 基础与滚动条 */
+        body { font-family: 'Inter', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* 视觉组件 */
+        .buffer-strip { background: repeating-linear-gradient(-45deg, #f1f5f9, #f1f5f9 6px, #e2e8f0 6px, #e2e8f0 12px); color: #64748b; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+        .card-transition { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-transition:active { transform: scale(0.98); }
+        .item-done { opacity: 0.6; filter: grayscale(100%); }
+        .item-done .buffer-strip { display: none; } 
+        
+        /* 动画与特效 */
+        @keyframes pulse-border { 0% { border-color: #fecaca; } 50% { border-color: #f87171; } 100% { border-color: #fecaca; } }
+        .emergency-card { background-color: #fff1f2; border: 2px solid #fecaca; animation: pulse-border 2s infinite; order: -1; }
+        .map-placeholder { background: radial-gradient(circle, #f1f5f9 10%, transparent 10%), #f8fafc; background-size: 20px 20px; color: #94a3b8; font-size: 0.85rem; font-weight: 500; }
+        .glass-bg { background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        
+        /* 内容增强 */
+        .highlight-item { position: relative; padding-left: 1.25rem; font-size: 0.8rem; color: #475569; line-height: 1.5; margin-bottom: 2px; }
+        .highlight-item::before { content: "•"; position: absolute; left: 0.4rem; color: #0ea5e9; font-weight: bold; }
+        .tag-pill { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; letter-spacing: 0.02em; }
+        
+        /* Plan B 连接线 */
+        .plan-b-line { position: absolute; left: 1rem; top: 0; bottom: 0; width: 1px; border-left: 2px dashed #cbd5e1; }
+        .plan-b-dot { position: absolute; left: 0.7rem; top: 1.25rem; width: 0.75rem; height: 0.75rem; background: #cbd5e1; border-radius: 50%; border: 2px solid #fff; }
+
+        /* Vue Transition */
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        .slide-enter-active, .slide-leave-active { transition: transform 0.3s ease; }
+        .slide-enter-from, .slide-leave-to { transform: translateY(100%); }
+        @media (min-width: 768px) { .slide-enter-from, .slide-leave-to { transform: translateY(20px); opacity: 0; } }
+    </style>
+</head>
+<body class="text-slate-700 h-[100dvh] overflow-hidden">
+
+<div id="app" class="flex flex-col md:flex-row h-full">
+
+    <transition name="fade">
+        <div v-if="ui.showOverview" class="fixed inset-0 z-[2000] bg-slate-900/40 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-6" @click.self="closeOverview">
+            <transition name="slide">
+                <div v-if="ui.showOverview" class="bg-white w-full md:max-w-md h-[85vh] md:h-auto md:max-h-[80vh] rounded-t-3xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex justify-between items-center shrink-0">
+                        <div><h2 class="text-lg font-bold text-slate-900">行程总览</h2><p class="text-xs text-slate-500 mt-0.5">共 {{ trip.days?.length }} 天 · {{ trip.meta?.budget }}</p></div>
+                        <button @click="closeOverview" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">✕</button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-5 space-y-4">
+                        <div v-for="(day, index) in trip.days" :key="index" @click="jumpToDay(index)" class="flex gap-4 p-3 rounded-xl border border-transparent hover:bg-slate-50 hover:border-slate-200 cursor-pointer transition-all group" :class="currentDayIndex === index ? 'bg-sky-50 border-sky-100 ring-1 ring-sky-200' : ''">
+                            <div class="w-14 shrink-0 flex flex-col items-center justify-center bg-white border border-slate-100 rounded-lg h-14 shadow-sm group-hover:shadow-md transition-shadow"><span class="text-[10px] font-bold uppercase text-slate-400">Day</span><span class="text-xl font-bold text-slate-800" :class="currentDayIndex === index ? 'text-primary' : ''">{{ day.day_index }}</span></div>
+                            <div class="flex-1 min-w-0 flex flex-col justify-center"><div class="text-xs font-medium text-slate-500 mb-0.5">{{ day.date.split('·')[0] }}</div><div class="font-bold text-slate-900 truncate">{{ day.summary }}</div></div>
+                            <div class="flex items-center text-slate-300 group-hover:text-primary">→</div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+    </transition>
+
+    <div class="flex-1 flex flex-col min-h-0 bg-white md:w-1/3 md:max-w-md md:border-r border-slate-200 z-10 shadow-2xl relative order-2 md:order-1">
+        
+        <header class="glass-bg border-b border-slate-100 p-4 absolute top-0 left-0 right-0 z-30 shrink-0 h-[76px] box-border flex justify-between items-center">
+            <div class="min-w-0">
+                <h1 class="text-xl font-bold text-slate-900 truncate tracking-tight">{{ trip.meta?.title || 'TripFlow' }}</h1>
+                <div class="flex items-center mt-1.5 gap-2"><p class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{{ trip.meta?.date_range }}</p></div>
+            </div>
+            <button @click="ui.showOverview = true" class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 shadow-sm rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors">
+                <span class="text-base">📅</span> <span class="hidden sm:inline">总览</span>
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto hide-scroll pb-32 md:pb-8 space-y-6" ref="scrollContainer">
+            <div class="h-[76px] shrink-0 w-full"></div>
+
+            <div v-if="errorMsg" class="mx-4 bg-rose-50 p-4 rounded-xl text-rose-600 text-sm text-center border border-rose-100">{{ errorMsg }}</div>
+            
+            <div v-else class="px-4 space-y-6">
+                <section class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-1 border border-slate-100 shadow-sm">
+                    <div @click="ui.showDashboard = !ui.showDashboard" class="p-3 flex justify-between items-center cursor-pointer select-none rounded-xl hover:bg-slate-50 transition-colors">
+                        <h2 class="font-bold text-slate-700 flex items-center gap-2.5">
+                            <span class="text-lg">🧳</span> 指挥中心
+                            <span class="text-[10px] font-bold bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">{{ checklistProgress }}</span>
+                        </h2>
+                        <div class="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 shadow-sm">
+                            <span class="text-[10px] transform transition-transform duration-300" :class="{'rotate-180': ui.showDashboard}">▼</span>
+                        </div>
+                    </div>
+
+                    <div v-show="ui.showDashboard" class="px-3 pb-4 pt-1 space-y-4">
+                        <div class="flex items-center gap-3 text-sm font-medium text-slate-600 bg-white p-3 rounded-xl border border-slate-100 shadow-sm"><span>{{ weatherDisplay }}</span></div>
+                        <div class="grid gap-2.5">
+                            <a v-for="(info, idx) in sortedKeyInfo" :key="idx" :href="info.link || '#'" 
+                               class="p-3.5 rounded-xl border transition-all active:scale-[0.98] flex justify-between items-center group relative overflow-hidden"
+                               :class="info.is_emergency ? 'emergency-card' : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm'">
+                                <div class="z-10">
+                                    <div class="text-[11px] font-bold uppercase tracking-wider mb-0.5" :class="info.is_emergency ? 'text-rose-600' : 'text-slate-400'">{{ info.label }} {{ info.is_emergency ? '🚨' : '' }}</div>
+                                    <div class="font-semibold text-slate-800 tracking-tight">{{ info.value }}</div>
+                                </div>
+                                <span v-if="info.link" class="text-slate-300 group-hover:text-primary transition-colors text-lg">↗</span>
+                            </a>
+                        </div>
+                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                            <div class="flex border-b border-slate-100 text-[11px] font-semibold tracking-wide">
+                                <button v-for="list in trip.pre_trip?.checklists" :key="list.phase" @click="switchPhase(list.phase)"
+                                        class="flex-1 py-2.5 text-center transition-colors select-none"
+                                        :class="ui.currentPhase === list.phase ? 'bg-slate-50 text-slate-800 border-b-2 border-primary' : 'text-slate-400 hover:text-slate-600'">{{ list.category }}</button>
+                            </div>
+                            <div class="p-1">
+                                <label v-for="item in currentChecklistItems" :key="item.id" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-50 cursor-pointer select-none transition-colors group">
+                                    <div class="relative flex items-center"><input type="checkbox" :checked="localState.checks[item.id]" @change="toggleCheck(item.id)" class="peer h-5 w-5 rounded-md border-2 border-slate-300 text-primary focus:ring-0 transition-all checked:border-primary checked:bg-primary"></div>
+                                    <span class="text-sm font-medium transition-all" :class="{'line-through text-slate-300': localState.checks[item.id], 'text-rose-500': item.priority === 'high' && !localState.checks[item.id], 'text-slate-700': !localState.checks[item.id]}">{{ item.text }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div v-if="trip.days" class="flex overflow-x-auto hide-scroll gap-2 py-1 sticky top-[0] z-10 bg-white/50 backdrop-blur-sm -mx-4 px-4 pb-2">
+                    <button v-for="(day, index) in trip.days" :key="day.day_index" 
+                            @click="switchDay(index)"
+                            class="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all border select-none whitespace-nowrap"
+                            :class="currentDayIndex === index ? 'bg-slate-800 text-white border-slate-800 shadow-md transform scale-105' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'">
+                        Day {{ day.day_index }}
+                    </button>
+                </div>
+
+                <section v-if="currentDay">
+                    <div class="sticky top-0 z-20 -mx-4 px-4 py-3 glass-bg border-b border-slate-100 flex justify-between items-end mb-6 shadow-sm">
+                        <div><div class="text-2xl font-bold text-slate-900 tracking-tight">{{ currentDay.date }}</div></div>
+                        <div v-if="currentDay.weather" class="text-right pb-1"><div class="text-2xl filter drop-shadow-sm">{{ currentDay.weather.icon }}</div></div>
+                    </div>
+
+                    <div class="relative pl-3 space-y-6">
+                        <div class="absolute left-[27px] top-4 bottom-4 w-0.5 bg-slate-200 -z-10 rounded-full"></div>
+                        <div v-for="item in processedItems" :key="item.id" class="group relative" :class="{'item-done': isItemDone(item)}">
+                            
+                            <div v-if="!item.isGroupHeader && !item.isGroupChild" class="flex gap-4">
+                                <div class="w-12 text-right flex-shrink-0 pt-2 flex flex-col items-end">
+                                    <div v-if="item.time" class="font-bold text-sm leading-tight" :class="item.status === 'anchor' ? 'text-anchor' : 'text-slate-900'">{{ item.time }}</div>
+                                    <div v-if="item.duration" class="text-[10px] font-bold text-slate-400 mt-0.5">{{ item.duration }}</div>
+                                    <div class="mt-3 opacity-30 group-hover:opacity-100 transition-opacity"><input type="checkbox" :checked="localState.done[item.id]" @change="toggleDone(item.id)" class="h-4 w-4 rounded-full border-2 border-slate-300 text-slate-400 focus:ring-0 cursor-pointer"></div>
+                                </div>
+                                <div class="flex-1 bg-white border border-slate-200 rounded-2xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] card-transition overflow-hidden select-none relative" @click="flyTo(item)">
+                                    <div v-if="item.status === 'anchor'" class="absolute left-0 top-0 bottom-0 w-1 bg-anchor"></div>
+                                    <div class="p-4">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div class="flex flex-col gap-1">
+                                                <h3 class="font-bold text-slate-800 text-[15px] leading-snug">{{ item.name }}</h3>
+                                                <div v-if="item.tags" class="flex flex-wrap gap-1"><span v-for="tag in item.tags" class="tag-pill bg-slate-100 text-slate-500 border border-slate-200">{{ tag }}</span></div>
+                                            </div>
+                                            <span class="text-xl ml-2 filter grayscale-[0.3]">{{ getTypeEmoji(item.type) }}</span>
+                                        </div>
+                                        <div v-if="!localState.done[item.id]" class="space-y-3">
+                                            <p v-if="item.note" class="text-xs font-semibold text-rose-500 bg-rose-50 inline-block px-2 py-0.5 rounded-md">⚠️ {{ item.note }}</p>
+                                            <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                                                <p v-if="item.description" class="text-xs text-slate-500 mb-2 leading-relaxed">{{ item.description }}</p>
+                                                <div v-if="item.highlights" class="space-y-1"><div v-for="hl in item.highlights" class="highlight-item">{{ hl }}</div></div>
+                                            </div>
+                                            <div v-if="item.booking" class="pt-1"><button @click.stop="toggleTicket(item.id)" class="w-full text-xs font-medium py-2 bg-white text-slate-600 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5"><span class="text-base">🎟️</span> 票务信息 <span class="text-[10px] opacity-50">{{ ui.activeTicket === item.id ? '▲' : '▼' }}</span></button><div v-if="ui.activeTicket === item.id" class="mt-2 p-3 bg-slate-50 border border-slate-200 rounded-lg text-center font-mono text-sm text-slate-700 shadow-inner">{{ item.booking.code }}</div></div>
+                                            <div class="flex gap-2 mt-2">
+                                                <a v-if="item.coords" :href="getNavUrl(item)" target="_blank" @click.stop class="flex-1 inline-flex items-center justify-center gap-1 text-xs font-bold text-primary bg-sky-50 py-2 rounded-lg hover:bg-sky-100 transition-colors"><span>🧭</span> 导航</a>
+                                                <a v-if="item.link" :href="item.link" target="_blank" @click.stop class="flex-1 inline-flex items-center justify-center gap-1 text-xs font-bold text-slate-600 bg-slate-100 py-2 rounded-lg hover:bg-slate-200 transition-colors"><span>🔗</span> 详情</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="item.buffer && !localState.done[item.id]" class="buffer-strip h-5 border-t border-slate-100 flex items-center px-3"><span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-2"></span>缓冲预留: {{ item.buffer }}</div>
+                                </div>
+                            </div>
+                            
+                            <div v-else-if="item.isGroupHeader" class="flex gap-4 opacity-95">
+                                <div class="w-12 text-right flex-shrink-0 pt-2 flex flex-col items-end">
+                                    <div v-if="item.time" class="font-bold text-option text-sm leading-tight">{{ item.time }}</div>
+                                    <div v-else class="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2"></div>
+                                </div>
+                                <div class="flex-1 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/30 overflow-hidden select-none">
+                                    <div @click="toggleGroup(item.group_id)" class="p-3 cursor-pointer hover:bg-slate-100 transition-colors flex justify-between items-center bg-white/50 backdrop-blur-sm">
+                                        <div class="text-sm font-semibold text-slate-600 flex items-center gap-2"><span class="text-[10px] font-bold bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded">Plan B</span> {{ item.group_title || '备选方案' }}</div>
+                                        <div class="flex items-center gap-2"><span class="text-[10px] bg-white border border-slate-200 px-1.5 rounded-md text-slate-400">{{ item.children.length + 1 }}</span><span class="text-[10px] text-slate-400 transform transition-transform duration-300" :class="{'rotate-180': ui.expandedGroups[item.group_id]}">▼</span></div>
+                                    </div>
+                                    <div v-show="ui.expandedGroups[item.group_id]" class="bg-slate-50/50 space-y-0 relative">
+                                        <div v-for="opt in [item, ...item.children]" :key="opt.id" class="relative pl-8 pr-4 py-4 border-t border-slate-100 first:border-0 hover:bg-white transition-colors cursor-pointer" @click="flyTo(opt)">
+                                            <div class="plan-b-line"></div><div class="plan-b-dot"></div>
+                                            <div class="flex justify-between items-start mb-2">
+                                                <div class="flex flex-col gap-1">
+                                                    <div class="text-sm font-bold text-slate-700"><span v-if="opt.time" class="font-mono text-xs text-option mr-1 bg-slate-100 px-1 rounded">{{ opt.time }}</span>{{ opt.name }}</div>
+                                                    <div v-if="opt.tags" class="flex flex-wrap gap-1"><span v-for="tag in opt.tags" class="tag-pill bg-white border border-slate-200 text-slate-400">{{ tag }}</span></div>
+                                                </div>
+                                                <span class="text-lg opacity-40">{{ getTypeEmoji(opt.type) }}</span>
+                                            </div>
+                                            <div class="space-y-2 pl-1">
+                                                <p v-if="opt.description" class="text-xs text-slate-500 leading-relaxed">{{ opt.description }}</p>
+                                                <div v-if="opt.highlights" class="space-y-1"><div v-for="hl in opt.highlights" class="highlight-item text-[11px]">{{ hl }}</div></div>
+                                                <div class="flex gap-2 mt-2 pt-1 border-t border-dashed border-slate-200">
+                                                    <a v-if="opt.coords" :href="getNavUrl(opt)" target="_blank" @click.stop class="text-[10px] font-bold text-primary flex items-center gap-1 hover:underline"><span>🧭</span> 导航</a>
+                                                    <a v-if="opt.link" :href="opt.link" target="_blank" @click.stop class="text-[10px] font-bold text-slate-500 flex items-center gap-1 hover:underline"><span>🔗</span> 详情</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-8"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full md:w-2/3 md:h-full shrink-0 bg-slate-100 order-1 md:order-2 relative border-l border-slate-200 z-0 transition-all duration-300 ease-in-out overflow-hidden"
+         :class="getMapHeightClass()">
+        <div id="map" class="w-full h-full z-0 outline-none"></div>
+        <div v-if="!mapEnabled" class="absolute inset-0 map-placeholder z-10"><div class="text-center"><div class="text-2xl mb-2">🗺️</div>地图加载失败<br><span class="text-xs font-normal opacity-70">已降级为列表模式</span></div></div>
+    </div>
+
+    <button @click="toggleMapState" class="md:hidden fixed bottom-6 right-4 z-50 glass-bg px-4 py-2.5 rounded-full text-xs font-bold text-slate-700 shadow-lg border border-white/50 backdrop-blur active:scale-95 transition-transform flex items-center gap-2 select-none">
+        <span>{{ getMapBtnText() }}</span>
+    </button>
+
+</div>
+
+<script>
+    const { createApp, ref, computed, onMounted, watch, nextTick } = Vue;
+
+    createApp({
+        setup() {
+            const trip = ref({});
+            const localState = ref({ checks: {}, done: {} });
+            
+            // ✅ 关键点：currentPhase 默认为 'docs'，匹配 JSON
+            const ui = ref({ showDashboard: true, showOverview: false, mapState: 1, currentPhase: 'docs', activeTicket: null, expandedGroups: {} });
+            
+            const currentDayIndex = ref(0);
+            const errorMsg = ref(null);
+            const mapEnabled = ref(true);
+            const weatherData = ref(null);
+            const scrollContainer = ref(null);
+            
+            let mapInstance = null;
+            let mapLayers = [];
+            let mapRoute = null;
+
+            const currentDay = computed(() => trip.value.days ? trip.value.days[currentDayIndex.value] : null);
+
+            const processedItems = computed(() => {
+                if (!currentDay.value) return [];
+                const result = [];
+                let activeGroup = null;
+                currentDay.value.items.forEach(item => {
+                    if (item.status === 'option' && item.group_id) {
+                        if (activeGroup && activeGroup.group_id === item.group_id) {
+                            activeGroup.children.push({ ...item, isGroupChild: true });
+                        } else {
+                            activeGroup = { ...item, isGroupHeader: true, children: [] };
+                            result.push(activeGroup);
+                        }
+                    } else {
+                        activeGroup = null;
+                        result.push(item);
+                    }
+                });
+                return result;
+            });
+
+            const weatherDisplay = computed(() => weatherData.value || trip.value.pre_trip?.weather_guide || '...');
+            const sortedKeyInfo = computed(() => trip.value.pre_trip?.key_info ? [...trip.value.pre_trip.key_info].sort((a, b) => (b.is_emergency ? 1 : 0) - (a.is_emergency ? 1 : 0)) : []);
+            const currentChecklistItems = computed(() => trip.value.pre_trip ? (trip.value.pre_trip.checklists.find(l => l.phase === ui.value.currentPhase)?.items || []) : []);
+            const checklistProgress = computed(() => {
+                const items = currentChecklistItems.value;
+                if (!items.length) return "0/0";
+                const done = items.reduce((acc, i) => acc + (localState.value.checks[i.id] ? 1 : 0), 0);
+                return `${done}/${items.length}`;
+            });
+
+            const getStorageKey = (type) => `tripflow_v${trip.value.meta.schema_version}_${btoa(encodeURIComponent(trip.value.meta.title)).slice(0, 8)}_${type}`;
+
+            const initLocalState = () => {
+                try {
+                    const checks = localStorage.getItem(getStorageKey('checks'));
+                    const done = localStorage.getItem(getStorageKey('done'));
+                    const phase = localStorage.getItem(getStorageKey('ui_phase'));
+                    if (checks) localState.value.checks = JSON.parse(checks);
+                    if (done) localState.value.done = JSON.parse(done);
+                    if (phase) ui.value.currentPhase = phase;
+                } catch(e) {}
+            };
+
+            const saveState = () => {
+                if (!trip.value.meta) return;
+                localStorage.setItem(getStorageKey('checks'), JSON.stringify(localState.value.checks));
+                localStorage.setItem(getStorageKey('done'), JSON.stringify(localState.value.done));
+                localStorage.setItem(getStorageKey('ui_phase'), ui.value.currentPhase);
+                updateMapVisuals();
+            };
+
+            const toggleCheck = (id) => { localState.value.checks[id] = !localState.value.checks[id]; saveState(); };
+            const toggleDone = (id) => { localState.value.done[id] = !localState.value.done[id]; saveState(); };
+            const switchPhase = (p) => { ui.value.currentPhase = p; saveState(); };
+            const toggleTicket = (id) => { ui.value.activeTicket = ui.value.activeTicket === id ? null : id; };
+            const toggleGroup = (gid) => { ui.value.expandedGroups[gid] = !ui.value.expandedGroups[gid]; };
+            const isItemDone = (item) => !!localState.value.done[item.id];
+            const getNavUrl = (item) => `http://googleusercontent.com/maps.google.com/search/?api=1&query=${item.coords[0]},${item.coords[1]}`;
+            const getTypeEmoji = (t) => ({ transport:'🚅', sight:'📷', food:'🍜', hotel:'🏨', cafe:'☕' }[t] || '📍');
+            const switchDay = (index) => { currentDayIndex.value = index; if (scrollContainer.value) scrollContainer.value.scrollTop = 0; };
+            const closeOverview = () => { ui.value.showOverview = false; };
+            const jumpToDay = (index) => { switchDay(index); closeOverview(); };
+
+            // 地图状态控制
+            const toggleMapState = () => {
+                ui.value.mapState = (ui.value.mapState + 1) % 3;
+                setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 350);
+            };
+            const getMapHeightClass = () => {
+                if (ui.value.mapState === 0) return 'h-0 min-h-0';
+                if (ui.value.mapState === 1) return 'h-[35vh] min-h-[35vh]';
+                return 'h-[70vh] min-h-[70vh]';
+            };
+            const getMapBtnText = () => {
+                if (ui.value.mapState === 0) return '🗺️ 显示地图';
+                if (ui.value.mapState === 1) return '🔍 展开地图';
+                return '🔽 收起地图';
+            };
+
+            const fetchWeather = async () => {
+                if (!trip.value.meta?.location_coords) return;
+                try {
+                    const [lat, lng] = trip.value.meta.location_coords;
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+                    const d = await res.json();
+                    if (d.current_weather) weatherData.value = `🌡️ 实时: ${d.current_weather.temperature}°C`;
+                } catch (e) {}
+            };
+
+            const tryInitMap = () => {
+                if (!trip.value.meta?.location_coords) return;
+                try {
+                    mapInstance = L.map('map', { zoomControl: false, attributionControl: false }).setView(trip.value.meta.location_coords, 13);
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapInstance);
+                    setTimeout(() => mapInstance.invalidateSize(), 200);
+                    updateMapVisuals();
+                } catch (e) { mapEnabled.value = false; }
+            };
+
+            const updateMapVisuals = () => {
+                if (!mapInstance || !currentDay.value) return;
+                mapLayers.forEach(l => mapInstance.removeLayer(l));
+                mapLayers = [];
+                if (mapRoute) mapInstance.removeLayer(mapRoute);
+                const points = [];
+                const bounds = [];
+                currentDay.value.items.forEach(item => {
+                    if (!item.coords) return;
+                    if (item.status === 'anchor' && item.type === 'transport') return; // 过滤大交通
+                    const isDone = isItemDone(item);
+                    let color = '#0ea5e9'; 
+                    let opacity = isDone ? 0.3 : 1;
+                    let radius = 6;
+                    if (item.status === 'anchor') { color = '#f43f5e'; radius = 8; }
+                    if (item.status === 'option') { color = '#64748b'; opacity = isDone ? 0.2 : 0.6; }
+                    const marker = L.circleMarker(item.coords, { color: '#fff', fillColor: color, fillOpacity: opacity, radius, weight: 2 }).addTo(mapInstance);
+                    mapLayers.push(marker);
+                    bounds.push(item.coords);
+                    if (item.status !== 'option') points.push(item.coords);
+                });
+                if (points.length > 1) { mapRoute = L.polyline(points, { color: '#0ea5e9', weight: 3, dashArray: '4, 10', opacity: 0.6 }).addTo(mapInstance); }
+                if (bounds.length) mapInstance.fitBounds(bounds, { padding: [50, 50] });
+            };
+
+            const flyTo = (item) => { 
+                if (ui.value.mapState === 0) { ui.value.mapState = 1; setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 350); }
+                if (mapInstance && item.coords) mapInstance.flyTo(item.coords, 15, { duration: 0.8 }); 
+            };
+
+            onMounted(async () => {
+                try {
+                    const res = await fetch('./data.json');
+                    if (!res.ok) throw new Error("Load failed");
+                    const data = await res.json();
+                    trip.value = data;
+                    initLocalState();
+                    fetchWeather();
+                    nextTick(() => tryInitMap());
+                } catch (e) { errorMsg.value = "无法加载行程数据 (data.json)"; }
+            });
+
+            watch(currentDayIndex, () => updateMapVisuals());
+
+            return { 
+                trip, localState, ui, currentDay, processedItems, errorMsg, mapEnabled, scrollContainer,
+                checklistProgress, currentChecklistItems, weatherDisplay, sortedKeyInfo,
+                toggleCheck, toggleDone, switchPhase, toggleTicket, toggleGroup, flyTo, getNavUrl, getTypeEmoji, isItemDone, 
+                switchDay, currentDayIndex, jumpToDay, closeOverview, 
+                toggleMapState, getMapHeightClass, getMapBtnText
+            };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

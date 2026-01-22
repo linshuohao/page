@@ -1,0 +1,623 @@
+{
+  "meta": {
+    "schema_version": "1.4",
+    "title": "🎿 极限雪季：中亚滑雪+里海探险 (最终完整版)",
+    "date_range": "2026.02.16 - 02.24",
+    "location_coords": [43.2389, 76.8897],
+    "budget": "16,500 CNY"
+  },
+  "pre_trip": {
+    "weather_guide": "🏔️ 雪场-15°C (体感冷)，🏙️ 城市-5°C，🏜️ 荒漠大风",
+    "key_info": [
+      {
+        "label": "🔥 必买缺口机票",
+        "value": "2.20 ALA-SCO (13:00左右)",
+        "link": "https://www.trip.com",
+        "is_emergency": true
+      },
+      {
+        "label": "必备 App",
+        "value": "Yandex Go (打车), 2GIS (地图)",
+        "link": "#"
+      },
+      {
+        "label": "时差提醒",
+        "value": "塔什干-3h / 阿拉木图-2h / 新疆-2h",
+        "link": "#"
+      }
+    ],
+    "checklists": [
+      {
+        "category": "📄 证件资金",
+        "phase": "docs",
+        "items": [
+          { "id": "doc_1", "text": "护照原件 (有效期6个月+)", "priority": "high" },
+          { "id": "doc_2", "text": "美元现金 ($500/人, 新钞)", "priority": "high" },
+          { "id": "doc_3", "text": "Visa/MasterCard 信用卡 (绑定打车)" },
+          { "id": "doc_4", "text": "打印机票行程单 & 酒店确认单" }
+        ]
+      },
+      {
+        "category": "🏂 滑雪装备",
+        "phase": "ski",
+        "items": [
+          { "id": "ski_1", "text": "雪镜 & 护脸 (现场租不到合适的)", "priority": "high" },
+          { "id": "ski_2", "text": "滑雪手套 (防水保暖)", "priority": "high" },
+          { "id": "ski_3", "text": "滑雪袜 (羊毛加厚 x3)" },
+          { "id": "ski_4", "text": "速干衣裤 (Base Layer)" },
+          { "id": "ski_5", "text": "板/鞋/盔 (太重，建议现场租)" }
+        ]
+      },
+      {
+        "category": "🔌 电子数码",
+        "phase": "elec",
+        "items": [
+          { "id": "elec_1", "text": "欧标插头 (两圆孔)", "priority": "high" },
+          { "id": "elec_2", "text": "大容量充电宝 (寒冷地区掉电快)" },
+          { "id": "elec_3", "text": "运动相机 + 自拍杆" },
+          { "id": "elec_4", "text": "取卡针 (换电话卡用)" }
+        ]
+      },
+      {
+        "category": "💊 生活医药",
+        "phase": "life",
+        "items": [
+          { "id": "life_1", "text": "高保湿面霜/唇膏 (极度干燥)", "priority": "high" },
+          { "id": "life_2", "text": "感冒药 & 肠胃药 (饮食差异)" },
+          { "id": "life_3", "text": "墨镜 (防雪盲/沙漠眩光)" },
+          { "id": "life_4", "text": "一次性床单/毛巾 (转机用)" }
+        ]
+      }
+    ]
+  },
+  "days": [
+    {
+      "day_index": 1,
+      "date": "2月16日 · 周一",
+      "summary": "塔什干：10小时丝路特种兵",
+      "items": [
+        {
+          "id": "d1_flight_1",
+          "status": "anchor",
+          "type": "transport",
+          "name": "04:35 广州 -> 08:55 塔什干",
+          "time": "08:55",
+          "buffer": "1h",
+          "coords": [41.2579, 69.2812],
+          "note": "抵达 TAS T2。预留1小时出关、换汇(50刀)、买流量卡。",
+          "booking": { "code": "HY C6512", "qr_text": "FLIGHT-1" }
+        },
+        {
+          "id": "d1_taxi",
+          "status": "standard",
+          "type": "transport",
+          "name": "打车进城",
+          "time": "10:00",
+          "duration": "30m",
+          "description": "用 Yandex Go 定位 'Plov Center'。约 30,000 索姆。",
+          "highlights": ["避开机场黑车", "直奔午餐"]
+        },
+        {
+          "id": "d1_lunch",
+          "status": "standard",
+          "type": "food",
+          "name": "早午餐：中亚抓饭中心",
+          "time": "10:30",
+          "duration": "1.5h",
+          "coords": [41.3456, 69.2845],
+          "tags": ["必吃", "碳水炸弹"],
+          "description": "赶在11点大锅出炉时刻。点一份 Wedding Plov 配酸奶。",
+          "highlights": ["围观巨型锅煮饭", "感受当地干饭氛围"]
+        },
+        {
+          "id": "d1_metro",
+          "status": "standard",
+          "type": "transport",
+          "name": "苏联地铁巡游",
+          "time": "12:15",
+          "duration": "1h",
+          "tags": ["地下宫殿"],
+          "description": "从 Bodomzor 站进，一路坐到 Chorsu 站。只买一次票，站站下车拍照。",
+          "highlights": ["Kosmonavtlar (宇航员站)", "Alisher Navoi (穹顶站)"]
+        },
+        {
+          "id": "d1_market",
+          "status": "standard",
+          "type": "sight",
+          "name": "楚苏集市 (Chorsu Bazaar)",
+          "time": "13:30",
+          "duration": "1.5h",
+          "coords": [41.3284, 69.2307],
+          "description": "蓝色穹顶集市。在此购买路途零食（杏干、葡萄干、馕）。",
+          "highlights": ["二楼俯拍机位", "试吃刚出炉的馕"]
+        },
+        {
+          "id": "d1_coffee",
+          "status": "option",
+          "type": "cafe",
+          "name": "休息：Tim's Coffee",
+          "time": "15:15",
+          "group_id": "tas_relax",
+          "description": "找个舒服的地方充电、修图、整理行李，准备去机场。"
+        },
+        {
+          "id": "d1_back",
+          "status": "anchor",
+          "type": "transport",
+          "name": "打车回机场",
+          "time": "16:15",
+          "note": "晚高峰拥堵预警！必须此时出发回 TAS T2。",
+          "tips": [{ "type": "warning", "text": "预留2.5小时安检" }]
+        },
+        {
+          "id": "d1_flight_2",
+          "status": "anchor",
+          "type": "transport",
+          "name": "19:10 塔什干 -> 20:45 阿拉木图",
+          "time": "19:10",
+          "coords": [43.3521, 77.0405],
+          "note": "抵达 ALA。打车去酒店约30分钟。",
+          "booking": { "code": "HY C6205", "qr_text": "FLIGHT-2" }
+        }
+      ]
+    },
+    {
+      "day_index": 2,
+      "date": "2月17日 · 周二",
+      "summary": "琼布拉克：全天滑雪",
+      "weather": { "icon": "🏔️", "text": "晴 -10°C", "temp": "-10°C", "warning": false },
+      "items": [
+        {
+          "id": "d2_breakfast",
+          "status": "standard",
+          "type": "food",
+          "name": "早餐 & 补给",
+          "time": "08:30",
+          "duration": "45m",
+          "description": "便利店买水和巧克力带上山。雪场物价较高。"
+        },
+        {
+          "id": "d2_transport",
+          "status": "standard",
+          "type": "transport",
+          "name": "打车至 Medeu 缆车站",
+          "time": "09:30",
+          "duration": "40m",
+          "coords": [43.1574, 77.0588],
+          "note": "避开早高峰。在 Medeu 售票处买缆车+雪票联票。"
+        },
+        {
+          "id": "d2_rental",
+          "status": "standard",
+          "type": "sight",
+          "name": "雪具租赁",
+          "time": "10:30",
+          "duration": "1h",
+          "description": "抵达 Shymbulak 基地层。刷护照租赁板、鞋、盔。寄存鞋子。",
+          "tips": [{ "type": "info", "text": "检查固定器DIN值" }]
+        },
+        {
+          "id": "d2_ski",
+          "status": "standard",
+          "type": "sight",
+          "name": "Shymbulak 畅滑",
+          "time": "11:30",
+          "duration": "5h",
+          "coords": [43.1283, 77.0805],
+          "tags": ["粉雪", "风景"],
+          "description": "中亚顶级雪场。建议先在 Combi-1 热身，再去 Combi-2 冲坡。",
+          "highlights": ["登顶 3200m Talgar Pass", "Bar 3200 喝咖啡看雪山"]
+        },
+        {
+          "id": "d2_lunch",
+          "status": "option",
+          "type": "food",
+          "name": "午餐：Chalet 木屋餐厅",
+          "time": "13:30",
+          "group_id": "ski_lunch",
+          "group_title": "🍔 雪场午餐",
+          "description": "环境最好的餐厅，适合休息拍照，汉堡不错。"
+        },
+        {
+          "id": "d2_dinner",
+          "status": "standard",
+          "type": "food",
+          "name": "晚餐：Navat (哈萨克菜)",
+          "time": "19:00",
+          "duration": "2h",
+          "coords": [43.2565, 76.9442],
+          "tags": ["必吃", "氛围感"],
+          "description": "下山回市区。这家装修非常有民族特色，必吃肉。",
+          "highlights": ["别施巴尔马克 (手抓肉)", "薄皮包子"]
+        }
+      ]
+    },
+    {
+      "day_index": 3,
+      "date": "2月18日 · 周三",
+      "summary": "进阶滑雪 or 城市漫游",
+      "items": [
+        {
+          "id": "d3_prep",
+          "status": "standard",
+          "type": "transport",
+          "name": "出发准备",
+          "time": "08:30",
+          "duration": "30m",
+          "description": "如果去 Oi-Qaragai，路程较远，需准备晕车贴和水。"
+        },
+        {
+          "id": "d3_opt_ski",
+          "status": "option",
+          "type": "sight",
+          "name": "方案A: Oi-Qaragai 滑雪场",
+          "time": "09:00",
+          "group_id": "d3_main",
+          "group_title": "🎿 上午行程二选一",
+          "coords": [43.1833, 77.1667],
+          "tags": ["林间滑雪", "进阶"],
+          "description": "打车约1小时。特色是穿梭在松林间的雪道，风小，更有野趣。",
+          "highlights": ["林海雪原穿越", "人少雪好"]
+        },
+        {
+          "id": "d3_opt_city",
+          "status": "option",
+          "type": "sight",
+          "name": "方案B: 潘菲洛夫公园 CityWalk",
+          "time": "09:30",
+          "group_id": "d3_main",
+          "coords": [43.2590, 76.9560],
+          "description": "升天大教堂 (Zenkov Cathedral) 喂鸽子，逛逛苏联战争纪念碑。",
+          "highlights": ["糖果色木质教堂", "乐器博物馆"]
+        },
+        {
+          "id": "d3_lunch",
+          "status": "standard",
+          "type": "food",
+          "name": "午餐：Kaganat (国民食堂)",
+          "time": "13:30",
+          "duration": "1h",
+          "description": "体验当地人的日常。自助选菜，便宜大碗，就在市区中心。"
+        },
+        {
+          "id": "d3_coffee_break",
+          "status": "standard",
+          "type": "cafe",
+          "name": "下午茶 & 补给",
+          "time": "14:45",
+          "description": "去 Magnum 超市买明天去峡谷路上的水和零食。然后喝杯咖啡休息。"
+        },
+        {
+          "id": "d3_bath",
+          "status": "anchor",
+          "type": "sight",
+          "name": "Arasan Baths (大澡堂)",
+          "time": "16:30",
+          "duration": "2.5h",
+          "coords": [43.2605, 76.9427],
+          "tags": ["必体验", "回血"],
+          "description": "滑雪两天的终极救赎。一定要体验苏式高温桑拿的树叶抽打。",
+          "tips": [{ "type": "warning", "text": "带好拖鞋/洗漱用品" }]
+        },
+        {
+          "id": "d3_dinner",
+          "status": "standard",
+          "type": "food",
+          "name": "晚餐：Darejani (格鲁吉亚菜)",
+          "time": "19:30",
+          "duration": "1.5h",
+          "description": "就在澡堂附近。必点奶酪饼 (Khachapuri) 和烤包子 (Khinkali)。"
+        }
+      ]
+    },
+    {
+      "day_index": 4,
+      "date": "2月19日 · 周四",
+      "summary": "自然奇观：恰伦大峡谷",
+      "items": [
+        {
+          "id": "d4_pickup",
+          "status": "anchor",
+          "type": "transport",
+          "name": "集合出发 (一日游)",
+          "time": "07:30",
+          "note": "通常在 Abay 体育场集合。车程3.5小时。",
+          "description": "记得带上昨天买的零食和水。路上会停一次休息站。"
+        },
+        {
+          "id": "d4_canyon",
+          "status": "standard",
+          "type": "sight",
+          "name": "恰伦大峡谷徒步",
+          "time": "11:30",
+          "duration": "4h",
+          "coords": [43.3547, 79.0760],
+          "tags": ["徒步", "壮观"],
+          "description": "Valley of Castles。一路下坡走到恰伦河边，风景绝美。",
+          "highlights": ["红色岩石层", "雪景峡谷", "河边野餐"]
+        },
+        {
+          "id": "d4_lunch",
+          "status": "standard",
+          "type": "food",
+          "name": "路餐 / 简餐",
+          "time": "13:30",
+          "description": "在峡谷底部的生态园吃自带干粮，或者买简单的烤肉。"
+        },
+        {
+          "id": "d4_back",
+          "status": "standard",
+          "type": "transport",
+          "name": "返回市区",
+          "time": "16:00",
+          "description": "回程约3.5小时。车上补觉。"
+        },
+        {
+          "id": "d4_dinner",
+          "status": "standard",
+          "type": "food",
+          "name": "晚餐：Tubeteika",
+          "time": "20:00",
+          "description": "传统的乌兹别克/哈萨克餐厅，环境很好，适合最后一晚。"
+        },
+        {
+          "id": "d4_pack",
+          "status": "anchor",
+          "type": "hotel",
+          "name": "收拾行李",
+          "time": "22:00",
+          "note": "明天飞阿克套，确认证件、充电器都在随身包里。"
+        }
+      ]
+    },
+    {
+      "day_index": 5,
+      "date": "2月20日 · 周五",
+      "summary": "转场日：飞向里海",
+      "items": [
+        {
+          "id": "d5_airport",
+          "status": "standard",
+          "type": "transport",
+          "name": "前往 ALA 机场",
+          "time": "10:30",
+          "duration": "40m",
+          "note": "预留时间应对早高峰堵车。"
+        },
+        {
+          "id": "d5_flight",
+          "status": "anchor",
+          "type": "transport",
+          "name": "阿拉木图 -> 阿克套",
+          "time": "13:00",
+          "buffer": "2h",
+          "coords": [43.6046, 51.1925],
+          "note": "假设航班时间。飞行3.5h。抵达 SCO 机场。",
+          "booking": { "code": "KC/DV", "qr_text": "CHECK-TICKET" }
+        },
+        {
+          "id": "d5_arrival",
+          "status": "standard",
+          "type": "transport",
+          "name": "打车进城",
+          "time": "16:30",
+          "duration": "40m",
+          "description": "机场离市区较远。沿途是一望无际的戈壁，运气好能看到骆驼。"
+        },
+        {
+          "id": "d5_hotel",
+          "status": "standard",
+          "type": "hotel",
+          "name": "入住海景酒店",
+          "time": "17:20",
+          "description": "推荐住在 Rock Trail 附近的酒店，步行可达海边。"
+        },
+        {
+          "id": "d5_walk",
+          "status": "standard",
+          "type": "sight",
+          "name": "里海岩石步道 (Rock Trail)",
+          "time": "18:00",
+          "duration": "1.5h",
+          "coords": [43.6420, 51.1550],
+          "tags": ["日落", "散步"],
+          "description": "栈道建在悬崖上。在这里看里海日落，风很大，戴好帽子。",
+          "highlights": ["岩壁灯光秀", "世界最大内陆湖"]
+        },
+        {
+          "id": "d5_dinner",
+          "status": "standard",
+          "type": "food",
+          "name": "海鲜晚餐",
+          "time": "19:40",
+          "description": "Aidana Plaza 附近，尝试里海鲟鱼烧烤。"
+        }
+      ]
+    },
+    {
+      "day_index": 6,
+      "date": "2月21日 · 周六",
+      "summary": "阿克套：硬核探险 vs 休闲",
+      "items": [
+        {
+          "id": "d6_opt_1",
+          "status": "option",
+          "type": "sight",
+          "name": "方案A: 博兹吉拉 (Bozjyra) 探险",
+          "time": "08:00",
+          "group_id": "aktau_day6",
+          "group_title": "🏜️ 今日玩法二选一",
+          "coords": [43.9167, 53.5333],
+          "tags": ["硬核", "远途"],
+          "description": "需包越野车，早出晚归(300km+)。白垩纪地貌，极度震撼。",
+          "highlights": ["牙齿岩 (The Fangs)", "火星地貌"]
+        },
+        {
+          "id": "d6_opt_2",
+          "status": "option",
+          "type": "sight",
+          "name": "方案B: 球形石谷 (Torysh)",
+          "time": "09:00",
+          "group_id": "aktau_day6",
+          "tags": ["休闲"],
+          "description": "看满地巨大的神秘石球，路程相对轻松。"
+        },
+        {
+          "id": "d6_dinner",
+          "status": "standard",
+          "type": "food",
+          "name": "晚餐 & 补给",
+          "time": "19:00",
+          "note": "去超市买好明天转机路上吃的零食（明天凌晨出发）。"
+        },
+        {
+          "id": "d6_sleep",
+          "status": "anchor",
+          "type": "hotel",
+          "name": "强制早睡",
+          "time": "21:00",
+          "note": "定好 02:30 的闹钟！明天是特种兵行程。"
+        }
+      ]
+    },
+    {
+      "day_index": 7,
+      "date": "2月22日 · 周日",
+      "summary": "12小时转机：滑冰 & 购物",
+      "items": [
+        {
+          "id": "d7_flight_1",
+          "status": "anchor",
+          "type": "transport",
+          "name": "05:05 阿克套 -> 08:10 阿拉木图",
+          "time": "05:05",
+          "coords": [43.3521, 77.0405],
+          "note": "SCAT DV732。上飞机补觉。",
+          "booking": { "code": "DV732", "qr_text": "FLIGHT-3" }
+        },
+        {
+          "id": "d7_luggage",
+          "status": "standard",
+          "type": "transport",
+          "name": "行李寄存",
+          "time": "08:40",
+          "description": "提取行李后，去机场 'Left Luggage' 寄存大件，轻装进城。"
+        },
+        {
+          "id": "d7_breakfast",
+          "status": "standard",
+          "type": "food",
+          "name": "早餐：Nedelka Coffee",
+          "time": "09:30",
+          "description": "打车至 Abay 大街。喝杯热咖啡，吃个可颂。"
+        },
+        {
+          "id": "d7_ice",
+          "status": "standard",
+          "type": "sight",
+          "name": "Medeu 高山滑冰",
+          "time": "11:00",
+          "duration": "2h",
+          "coords": [43.1574, 77.0588],
+          "tags": ["世界最高冰场"],
+          "description": "既然雪滑够了，来体验世界上海拔最高的室外冰场。风景无敌。",
+          "highlights": ["现场租冰鞋", "拍照极佳"]
+        },
+        {
+          "id": "d7_shop",
+          "status": "standard",
+          "type": "sight",
+          "name": "绿色巴扎 (Green Bazaar)",
+          "time": "14:30",
+          "duration": "1.5h",
+          "coords": [43.2635, 76.9547],
+          "tags": ["购物"],
+          "description": "最后的补货。买 Rahat 巧克力、蜂蜜、马肠带回国。",
+          "highlights": ["蓝色包装巧克力最好吃"]
+        },
+        {
+          "id": "d7_dinner",
+          "status": "standard",
+          "type": "food",
+          "name": "早晚餐：Kishlak",
+          "time": "16:30",
+          "description": "吃最后一顿正宗中亚菜，然后打车去机场。"
+        },
+        {
+          "id": "d7_airport_back",
+          "status": "anchor",
+          "type": "transport",
+          "name": "返回机场取行李",
+          "time": "18:00",
+          "note": "取回寄存行李，重新值机托运。",
+          "tips": [{ "type": "warning", "text": "南航柜台排队人多" }]
+        },
+        {
+          "id": "d7_flight_2",
+          "status": "anchor",
+          "type": "transport",
+          "name": "20:40 阿拉木图 -> 01:25+1 乌鲁木齐",
+          "time": "20:40",
+          "coords": [43.9083, 87.4742],
+          "note": "CZ6012。注意时差。"
+        }
+      ]
+    },
+    {
+      "day_index": 8,
+      "date": "2月23日 · 周一",
+      "summary": "乌鲁木齐：干尸、美食与归途",
+      "items": [
+        {
+          "id": "d8_arrival",
+          "status": "anchor",
+          "type": "hotel",
+          "name": "01:25 抵达 URC",
+          "time": "01:25",
+          "note": "非常疲惫。务必提前定好有【24小时接机】的机场附近酒店。",
+          "booking": { "code": "HOTEL", "qr_text": "SHOW-FRONT-DESK" }
+        },
+        {
+          "id": "d8_sleep",
+          "status": "standard",
+          "type": "hotel",
+          "name": "补觉",
+          "time": "02:30",
+          "duration": "至10:30",
+          "description": "睡到自然醒，退房寄存行李。"
+        },
+        {
+          "id": "d8_museum",
+          "status": "standard",
+          "type": "sight",
+          "name": "新疆自治区博物馆",
+          "time": "11:30",
+          "duration": "2h",
+          "coords": [43.8235, 87.5872],
+          "tags": ["必看", "免费"],
+          "description": "需提前预约。二楼干尸馆必看（楼兰美女）。",
+          "highlights": ["3000年前干尸", "五星出东方护臂"]
+        },
+        {
+          "id": "d8_lunch",
+          "status": "standard",
+          "type": "food",
+          "name": "告别午餐：丝路有约",
+          "time": "14:00",
+          "duration": "1.5h",
+          "description": "回国第一顿！大盘鸡、椒麻鸡、烤包子安排上。"
+        },
+        {
+          "id": "d8_flight",
+          "status": "anchor",
+          "type": "transport",
+          "name": "16:55 乌鲁木齐 -> 深圳",
+          "time": "16:55",
+          "coords": [22.6267, 113.8080],
+          "note": "CZ3912 (经停武汉)。00:55 抵达深圳。打车回家。",
+          "booking": { "code": "CZ3912", "qr_text": "FLIGHT-5" }
+        }
+      ]
+    }
+  ]
+}

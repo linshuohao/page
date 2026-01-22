@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中亚滑雪狂飙之旅 | 2.16-2.24</title>
+    <style>
+      :root {
+        --primary: #007aff;
+        --secondary: #5ac8fa;
+        --accent: #ff9500;
+        --danger: #ff3b30;
+        --bg: #f2f2f7;
+        --card-bg: #ffffff;
+        --text-main: #1c1c1e;
+        --text-sub: #8e8e93;
+        --ski-gradient: linear-gradient(135deg, #e0f7fa 0%, #e1efff 100%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text-main);
+        line-height: 1.6;
+        padding-bottom: 40px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(to right, #2c3e50, #3498db);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      header h1 {
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+      }
+      header p {
+        opacity: 0.9;
+        font-size: 0.9rem;
+      }
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 15px;
+        font-size: 0.85rem;
+      }
+      .tag {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 10px;
+        border-radius: 15px;
+      }
+
+      /* Container */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Timeline */
+      .timeline {
+        position: relative;
+        padding-left: 20px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 10px;
+        bottom: 0;
+        width: 2px;
+        background: #d1d1d6;
+      }
+
+      /* Day Card */
+      .day-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        margin-bottom: 20px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s;
+        overflow: hidden;
+      }
+      .day-card:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Timeline Dot */
+      .day-card::before {
+        content: "";
+        position: absolute;
+        left: -24px;
+        top: 25px;
+        width: 12px;
+        height: 12px;
+        background: var(--primary);
+        border-radius: 50%;
+        border: 3px solid var(--bg);
+        z-index: 2;
+      }
+
+      /* Card Header */
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .date-box {
+        display: flex;
+        flex-direction: column;
+      }
+      .date {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+      .weekday {
+        font-size: 0.8rem;
+        color: var(--text-sub);
+      }
+      .location {
+        font-weight: 600;
+        font-size: 1.2rem;
+      }
+
+      /* Labels */
+      .badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: inline-block;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+      .badge.flight {
+        background: #e3f2fd;
+        color: #1976d2;
+      }
+      .badge.ski {
+        background: #e0f7fa;
+        color: #006064;
+        border: 1px solid #b2ebf2;
+      }
+      .badge.alert {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+        animation: pulse 2s infinite;
+      }
+
+      /* Content Details (Initially Hidden) */
+      .details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        border-top: 1px solid transparent;
+      }
+      .day-card.active .details {
+        max-height: 500px; /* Approximate max height */
+        border-top: 1px solid #f0f0f0;
+        margin-top: 15px;
+        padding-top: 15px;
+      }
+
+      .flight-info {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+        font-size: 0.9rem;
+        border-left: 3px solid var(--secondary);
+      }
+      .activity-list {
+        list-style: none;
+      }
+      .activity-list li {
+        margin-bottom: 8px;
+        padding-left: 20px;
+        position: relative;
+        font-size: 0.95rem;
+      }
+      .activity-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--secondary);
+        font-weight: bold;
+      }
+
+      /* Specific Styles */
+      .ski-day {
+        background: var(--ski-gradient);
+        border: 1px solid #b3e5fc;
+      }
+      .ski-day::before {
+        background: #00bcd4;
+      }
+
+      .warning-card {
+        border: 2px solid var(--danger);
+      }
+      .warning-card::before {
+        background: var(--danger);
+      }
+
+      .expand-hint {
+        font-size: 0.8rem;
+        color: var(--text-sub);
+        text-align: center;
+        margin-top: 10px;
+        display: block;
+        opacity: 0.6;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Printing */
+      @media print {
+        body {
+          background: white;
+        }
+        .details {
+          max-height: none !important;
+          border-top: 1px solid #ddd;
+          margin-top: 10px;
+          padding-top: 10px;
+        }
+        .expand-hint {
+          display: none;
+        }
+        header {
+          background: white;
+          color: black;
+          border-bottom: 1px solid black;
+        }
+        .tag {
+          background: #eee;
+          border: 1px solid #ccc;
+          color: black;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>🏂 中亚滑雪 & 里海探险</h1>
+      <p>广州 - 塔什干 - 阿拉木图 - 阿克套 - 深圳</p>
+      <div class="stats">
+        <span class="tag">8 天行程</span>
+        <span class="tag">3 国体验</span>
+        <span class="tag">2 天滑雪</span>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="timeline">
+        <div class="day-card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月16日</span>
+              <span class="weekday">周一</span>
+            </div>
+            <div class="location">出发 & 塔什干</div>
+          </div>
+          <div>
+            <span class="badge flight">✈️ 广州 -> 塔什干</span>
+            <span class="badge flight">✈️ 塔什干 -> 阿拉木图</span>
+          </div>
+          <div class="details">
+            <div class="flight-info">
+              <strong>去程 04:35 - 08:55</strong> (CAN T1 -> TAS T2)<br />
+              <strong>转机 10h15m</strong> (塔什干市区一日游)<br />
+              <strong>中转 19:10 - 20:45</strong> (TAS T2 -> ALA T1)
+            </div>
+            <ul class="activity-list">
+              <li>利用免签入境乌兹别克斯坦</li>
+              <li>楚苏集市 (Chorsu Bazaar) 吃抓饭</li>
+              <li>哈兹拉提伊玛目广场打卡</li>
+              <li>晚间抵达阿拉木图，入住市区</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+
+        <div class="day-card ski-day" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月17日</span>
+              <span class="weekday">周二</span>
+            </div>
+            <div class="location">阿拉木图 (滑雪日)</div>
+          </div>
+          <div>
+            <span class="badge ski">🏂 琼布拉克雪场</span>
+            <span class="badge">🏔️ 麦迪奥冰场</span>
+          </div>
+          <div class="details">
+            <ul class="activity-list">
+              <li><strong>上午：</strong>打车至麦迪奥 (Medeu)，换缆车上山</li>
+              <li><strong>全天：</strong>Shymbulak 3200米畅滑 (租赁装备)</li>
+              <li><strong>傍晚：</strong>麦迪奥高山滑冰体验</li>
+              <li><strong>晚餐：</strong>市区 Navat 餐厅吃马肉那仁</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+
+        <div class="day-card ski-day" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月18日</span>
+              <span class="weekday">周三</span>
+            </div>
+            <div class="location">阿拉木图 (进阶)</div>
+          </div>
+          <div>
+            <span class="badge ski">🏂 深度滑雪</span>
+            <span class="badge">🧖‍♂️ 苏式桑拿</span>
+          </div>
+          <div class="details">
+            <ul class="activity-list">
+              <li><strong>白天：</strong>继续滑雪或挑战 Talgar Pass</li>
+              <li>
+                <strong>下午：</strong>体验 Arasan Baths (阿拉桑大澡堂) 恢复体力
+              </li>
+              <li><strong>晚上：</strong>升天大教堂喂鸽子</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+
+        <div class="day-card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月19日</span>
+              <span class="weekday">周四</span>
+            </div>
+            <div class="location">恰伦大峡谷</div>
+          </div>
+          <div>
+            <span class="badge">🏜️ 自然奇观</span>
+            <span class="badge">📸 摄影</span>
+          </div>
+          <div class="details">
+            <ul class="activity-list">
+              <li>参加当地一日游团前往 Charyn Canyon</li>
+              <li>徒步红色岩石峡谷 (约3小时)</li>
+              <li>返回市区整理行李，准备转场</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+
+        <div class="day-card warning-card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月20日</span>
+              <span class="weekday">周五</span>
+            </div>
+            <div class="location">飞往阿克套</div>
+          </div>
+          <div>
+            <span class="badge alert">⚠️ 需自行买票</span>
+            <span class="badge flight">✈️ ALA -> SCO</span>
+          </div>
+          <div class="details">
+            <div
+              class="flight-info"
+              style="
+                border-left-color: var(--danger);
+                background-color: #ffebee;
+              "
+            >
+              <strong>注意：此段机票未包含在原订单中！</strong><br />
+              建议购买 Air Astana 或 SCAT 航班<br />
+              飞行时长约 3.5 - 4 小时
+            </div>
+            <ul class="activity-list">
+              <li>抵达西部的里海城市：阿克套</li>
+              <li>漫步里海海滨栈道 (Rock Trail)</li>
+              <li>享用里海鱼鲜晚餐</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击展开 (含重要提醒)</span>
+        </div>
+
+        <div class="day-card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月21日</span>
+              <span class="weekday">周六</span>
+            </div>
+            <div class="location">阿克套探险</div>
+          </div>
+          <div>
+            <span class="badge">🌊 里海</span>
+            <span class="badge">🏜️ 荒漠地貌</span>
+          </div>
+          <div class="details">
+            <ul class="activity-list">
+              <li>方案A：包车前往 Bozjyra (博兹吉拉) 看火星地貌 (需全天)</li>
+              <li>方案B：市区休闲，看海，打卡 Ibeckowsky 奇岩</li>
+              <li><strong>重要：</strong>今晚务必早睡，凌晨3点需出发去机场</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+
+        <div class="day-card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月22日</span>
+              <span class="weekday">周日</span>
+            </div>
+            <div class="location">大转机日</div>
+          </div>
+          <div>
+            <span class="badge flight">✈️ 阿克套->阿拉木图</span>
+            <span class="badge flight">✈️ 阿拉木图->乌鲁木齐</span>
+          </div>
+          <div class="details">
+            <div class="flight-info">
+              <strong>05:05 - 08:10</strong> (SCO -> ALA) SCAT航空<br />
+              <strong>中转 12.5h</strong> (需提取行李换航站楼)<br />
+              建议：去绿色巴扎买伴手礼，喝咖啡<br />
+              <strong>20:40 - 01:25(+1)</strong> (ALA -> URC) 南航
+            </div>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+
+        <div class="day-card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <div class="date-box">
+              <span class="date">2月23日</span>
+              <span class="weekday">周一</span>
+            </div>
+            <div class="location">乌鲁木齐</div>
+          </div>
+          <div>
+            <span class="badge">🍖 新疆美食</span>
+            <span class="badge flight">✈️ 乌鲁木齐 -> 深圳</span>
+          </div>
+          <div class="details">
+            <div class="flight-info">
+              <strong>01:25</strong> 抵达乌鲁木齐 (推荐住机场附近补觉)<br />
+              <strong>16:55</strong> 起飞回深圳 (CZ3912)
+            </div>
+            <ul class="activity-list">
+              <li>中午去市区吃过油肉拌面、椒麻鸡</li>
+              <li>逛新疆国际大巴扎</li>
+              <li>2月24日 00:55 抵达深圳宝安 T3</li>
+            </ul>
+          </div>
+          <span class="expand-hint">▼ 点击查看详情</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleCard(card) {
+        // Toggle the clicked card
+        card.classList.toggle("active");
+
+        // Optional: Close others to keep it clean (Uncomment if desired)
+        /*
+        const allCards = document.querySelectorAll('.day-card');
+        allCards.forEach(c => {
+            if (c !== card) {
+                c.classList.remove('active');
+            }
+        });
+        */
+
+        // Update hint text
+        const hint = card.querySelector(".expand-hint");
+        if (card.classList.contains("active")) {
+          hint.textContent = "▲ 点击收起";
+          hint.style.opacity = "1";
+        } else {
+          hint.textContent = "▼ 点击查看详情";
+          hint.style.opacity = "0.6";
+        }
+      }
+    </script>
+  </body>
+</html>
